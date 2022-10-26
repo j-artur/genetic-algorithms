@@ -22,9 +22,7 @@ fn fitness(pair: &Pair) -> f64 {
 /// Returns the fittest pairs from a population
 fn select_parents(pairs: &Vec<Pair>) -> Vec<Pair> {
     // Maps each pair to a tuple containing itself and its fitness
-    let mut fitnesses: Vec<_> = pairs.iter().map(|p| (p, fitness(p))).collect();
-    // Sorts the pairs by their fitness in descending order
-    fitnesses.sort_by(|(_, a), (_, b)| b.partial_cmp(a).unwrap());
+    let fitnesses: Vec<_> = pairs.iter().map(|p| (p, fitness(p))).collect();
 
     // Maps each pair to a tuple containing itself and its accumulated fitness
     // (the sum of all previous fitnesses + its own)
@@ -66,17 +64,13 @@ fn select_parents(pairs: &Vec<Pair>) -> Vec<Pair> {
 
 /// Performs crossover on every pair of individuals in a population
 fn crossover(parents: &Vec<Pair>) -> Vec<Pair> {
-    let mut total_children = Vec::new();
-    // For each pair of parents
-    for (i, p1) in parents.iter().enumerate() {
-        for p2 in &parents[i + 1..] {
-            // Generates children from the parents
-            let children = p1.crossover(p2);
-            // And adds them to the list of all children
-            total_children.extend(children);
-        }
-    }
-    total_children
+    let p1 = parents[0];
+    let p2 = parents[1];
+
+    // Generates children from the parents
+    let children = p1.crossover(&p2);
+
+    children
 }
 
 /// Performs mutations on a population based on the mutation rate

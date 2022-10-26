@@ -4,7 +4,7 @@ use crate::types::{Number, Pair};
 
 pub const POPULATION_SIZE: u64 = 10;
 pub const MUTATION_RATE: f64 = 0.2;
-pub const MAX_GENERATIONS: u64 = 1000;
+pub const MAX_GENERATIONS: u64 = 20;
 
 /// The function to be optimized by the genetic algorithm (f(x,y) = sqrt(x^2 + 2*y^4))
 pub fn function(x: Number, y: Number) -> f64 {
