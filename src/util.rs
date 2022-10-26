@@ -5,12 +5,11 @@ use termion::{
 
 use crate::{config::function, fittest_pair, types::Pair};
 
-pub fn print_info(n: u64, population: &Vec<Pair>) {
-    println!("{}Generation: {}{}{}", Fg(Blue), Bold, n, style::Reset);
+pub fn print_pairs(pairs: &Vec<Pair>) {
     println!(
         "{}[{}]{}",
         Fg(Cyan),
-        population
+        pairs
             .iter()
             .map(|p| format!("( {} , {} )", p.x().value(), p.y().value()))
             .collect::<Vec<String>>()
@@ -20,13 +19,25 @@ pub fn print_info(n: u64, population: &Vec<Pair>) {
     println!(
         "{}[{}]{}",
         Fg(Cyan),
-        population
+        pairs
             .iter()
             .map(|p| format!("({},{})", p.x().bits(), p.y().bits()))
             .collect::<Vec<String>>()
             .join(", "),
         Fg(Reset)
     );
+}
+
+pub fn print_info(n: u64, parents: &Vec<Pair>, population: &Vec<Pair>) {
+    println!("{}Generation: {}{}{}", Fg(Blue), Bold, n, style::Reset);
+    if !parents.is_empty() {
+        println!("{}Parents from old generation:{}", Fg(Green), style::Reset);
+        print_pairs(parents);
+        println!("{}New population:{}", Fg(Green), style::Reset);
+    } else {
+        println!("{}Population:{}", Fg(Green), style::Reset);
+    }
+    print_pairs(population);
     let fittest_pair = fittest_pair(population);
     println!(
         "{}Fittest pair: {}{}{}",

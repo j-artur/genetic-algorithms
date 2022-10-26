@@ -92,7 +92,7 @@ fn mutate(generation: &mut Vec<Pair>, mut_rate: f64) {
 }
 
 /// Performs a single generation of the genetic algorithm
-fn next_generation(old_gen: &Vec<Pair>, mut_rate: f64) -> Vec<Pair> {
+fn next_generation(old_gen: &Vec<Pair>, mut_rate: f64) -> (Vec<Pair>, Vec<Pair>) {
     // Selects the parents from the old generation
     let selected_parents = select_parents(&old_gen);
 
@@ -102,7 +102,7 @@ fn next_generation(old_gen: &Vec<Pair>, mut_rate: f64) -> Vec<Pair> {
     // Performs mutations on the new population
     mutate(&mut new_population, mut_rate);
 
-    new_population
+    (selected_parents, new_population)
 }
 
 fn main() {
@@ -111,7 +111,7 @@ fn main() {
 
     // Populates the first generation by randomly generating pairs
     let first_gen: Vec<_> = (0..POPULATION_SIZE).map(|_| Pair::random()).collect();
-    print_info(0, &first_gen);
+    print_info(0, &vec![], &first_gen);
 
     // If the first generation is already the fittest, we're done
     let fittest = fittest_pair(&first_gen);
@@ -126,8 +126,8 @@ fn main() {
         i += 1;
 
         // Generates the next generation from the old one
-        let new_gen = next_generation(&old_gen, MUTATION_RATE);
-        print_info(i, &new_gen);
+        let (parents, new_gen) = next_generation(&old_gen, MUTATION_RATE);
+        print_info(i, &parents, &new_gen);
 
         // If the new generation is the fittest, we're done
         let fittest = fittest_pair(&new_gen);
